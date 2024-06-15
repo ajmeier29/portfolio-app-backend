@@ -1,13 +1,11 @@
 require('dotenv').config()
 const express = require('express')
-const cors = require('cors')
 const axios = require('axios')
 const app = express()
 const port = 8000
 
 const SITE_SECRET = process.env.SITE_SECRET
 
-app.use(cors())
 app.use(express.json())
 
 app.post('/verify', async (request, response) => {
