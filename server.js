@@ -19,5 +19,5 @@ app.post('/verify', async (request, response) => {
 })
 
 app.listen((process.env.PORT || 5000), () => {
-  console.log(`Server listening at ${port}`)
+  console.log(`reCaptcha Server listening at ${port}`)
 })
