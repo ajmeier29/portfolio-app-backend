@@ -18,5 +18,6 @@ app.post('/verify', async (request, response) => {
 })
 
 app.listen(port, () => {
-  console.log(`reCaptcha Server listening at ${port}`)
+  console.log(`reCaptcha Server listening at ${port}`);
+  console.log(`Settings secret: ${SITE_SECRET}`);
 })
