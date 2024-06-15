@@ -14,8 +14,9 @@ app.post('/verify', async (request, response) => {
     `https://www.google.com/recaptcha/api/siteverify?secret=${SITE_SECRET}&response=${captchaValue}`,
   )
   response.send(data)
+  console.log(`Sent data for captchaValue: ${captchaValue}`)
 })
 
 app.listen(port, () => {
-  console.log(`Server listening at ${port}`)
+  console.log(`reCaptcha Server listening at ${port}`)
 })
