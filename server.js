@@ -1,11 +1,13 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const axios = require('axios')
 const app = express()
 const port = 8000
 
 const SITE_SECRET = process.env.SITE_SECRET
 
+app.use(cors())
 app.use(express.json())
 
 app.post('/verify', async (request, response) => {
@@ -14,10 +16,8 @@ app.post('/verify', async (request, response) => {
     `https://www.google.com/recaptcha/api/siteverify?secret=${SITE_SECRET}&response=${captchaValue}`,
   )
   response.send(data)
-  console.log(`Sent data for captchaValue: ${captchaValue}`)
 })
 
 app.listen(port, () => {
-  console.log(`reCaptcha Server listening at ${port}`);
-  console.log(`Settings secret: ${SITE_SECRET}`);
+  console.log(`Server listening at ${port}`)
 })
