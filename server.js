@@ -3,7 +3,6 @@ const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
 const app = express()
-
 const SITE_SECRET = process.env.SITE_SECRET
 
 app.use(cors())
@@ -17,6 +16,7 @@ app.post('/verify', async (request, response) => {
   response.send(data)
 })
 
-app.listen((process.env.PORT || 5000), () => {
+const port = (process.env.PORT || 5000);
+app.listen(port, () => {
   console.log(`reCaptcha Server listening at ${port}`)
 })
