@@ -18,6 +18,6 @@ app.post('/verify', async (request, response) => {
   response.send(data)
 })
 
-app.listen(port, () => {
+app.listen((process.env.PORT || 5000), () => {
   console.log(`Server listening at ${port}`)
 })
