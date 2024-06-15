@@ -3,7 +3,6 @@ const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
 const app = express()
-const port = 8000
 
 const SITE_SECRET = process.env.SITE_SECRET
 
