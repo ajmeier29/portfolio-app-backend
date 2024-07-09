@@ -28,32 +28,73 @@ app.post('/verify/invisible', async (request, response) => {
 })
 
 app.post('/subscribe/justin', async (request, response) => {
-  const emailAddress = request.body.email_address
-  console.log(`reqBody: ${JSON.stringify(emailAddress)}`)
-  console.log(`JUSTIN_EMAIL_OCTO_API_KEY: ${JUSTIN_EMAIL_OCTO_API_KEY}`)
-  const url = `https://emailoctopus.com/api/1.5/lists/${JUSTIN_EMAIL_OCTO_LIST_ID}/contacts`;
-  const subscriberData =
-  {
-    api_key: JUSTIN_EMAIL_OCTO_API_KEY,
-    email_address: emailAddress
-  }
-  console.log(`subscriberData: ${JSON.stringify(subscriberData)}`)
-  var respData = ''
-  await axios.post(url, subscriberData, {
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => {
-      respData = response.data
-      console.log('New subscriber added:', response.data);
-    })
-    .catch(error => {
-      console.error('Error adding subscriber:', error);
+  try {
+    const emailAddress = request.body.email_address;
+    console.log(`reqBody: ${JSON.stringify(emailAddress)}`);
+    console.log(`JUSTIN_EMAIL_OCTO_API_KEY: ${JUSTIN_EMAIL_OCTO_API_KEY}`);
+    const url = `https://emailoctopus.com/api/1.5/lists/${JUSTIN_EMAIL_OCTO_LIST_ID}/contacts`;
+    const subscriberData = {
+      api_key: JUSTIN_EMAIL_OCTO_API_KEY,
+      email_address: emailAddress,
+    };
+    console.log(`subscriberData: ${JSON.stringify(subscriberData)}`);
+
+    const apiResponse = await axios.post(url, subscriberData, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
     });
-  response.send(respData)
-})
+
+    console.log('New subscriber added:', apiResponse.data);
+    response.send(apiResponse.data);
+  } catch (error) {
+    //console.error('Error adding subscriber:', error);
+    if (!response.headersSent) {
+      // Only set status and send error if headers haven't been sent yet
+      response.status(error.response?.status || 500).send({
+        status: error.response?.status || 500,
+        reason: error.message,
+        body: error.response?.data || 'Unknown error',
+      });
+    }
+  }
+});
+
+
+
+// app.post('/subscribe/justin', async (request, response) => {
+//   const emailAddress = request.body.email_address
+//   console.log(`reqBody: ${JSON.stringify(emailAddress)}`)
+//   console.log(`JUSTIN_EMAIL_OCTO_API_KEY: ${JUSTIN_EMAIL_OCTO_API_KEY}`)
+//   const url = `https://emailoctopus.com/api/1.5/lists/${JUSTIN_EMAIL_OCTO_LIST_ID}/contacts`;
+//   const subscriberData =
+//   {
+//     api_key: JUSTIN_EMAIL_OCTO_API_KEY,
+//     email_address: emailAddress
+//   }
+//   console.log(`subscriberData: ${JSON.stringify(subscriberData)}`)
+//   var respData = ''
+//   await axios.post(url, subscriberData, {
+//     headers: {
+//       'Accept': 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//   })
+//     .then(response => {
+//       respData = response.data
+//       console.log('New subscriber added:', response.data);
+//     })
+//     .catch(error => {
+//       //console.error('Error adding subscriber:', error);
+//       response.status(error.response?.status || 500).send({
+//         status: error.response?.status || 500,
+//         reason: error.message,
+//         body: error.response?.data || 'Unknown error',
+//       });
+//     });
+//   response.send(respData)
+// })
 
 const port = (process.env.PORT || 5001);
 app.listen(port, () => {
