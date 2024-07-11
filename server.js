@@ -1,4 +1,5 @@
 require('dotenv').config()
+const { Resend } = require("resend");
 const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
@@ -30,7 +31,7 @@ app.post('/verify/invisible', async (request, response) => {
 app.post('/subscribe/justin', async (request, response) => {
   try {
     const resend = new Resend(JUSTIN_RESEND_ID);
-
+    console.log(`subscribing ${request.body.email_address}`)
     resend.contacts.create({
       email: request.body.email_address,
       firstName: '',
@@ -40,7 +41,7 @@ app.post('/subscribe/justin', async (request, response) => {
     });
 
   } catch (error) {
-    //console.error('Error adding subscriber:', error);
+    console.error('Error adding subscriber:', error);
     if (!response.headersSent) {
       // Only set status and send error if headers haven't been sent yet
       response.status(error.response?.status || 500).send({
