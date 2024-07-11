@@ -39,11 +39,12 @@ app.post('/subscribe/justin', async (request, response) => {
       unsubscribed: false,
       audienceId: JUSTIN_RESEND_AUD_ID,
     }).then((resp) => {
-      console.log(`Response: ${JSON.stringify(resp)}`)
+      console.log(`Subscribed New Email for Justin: ${JSON.stringify(resp)}`)
+      response.send(resp.data);
     });
 
   } catch (error) {
-    console.error('Error adding subscriber:', error);
+    console.error('Error adding Justin gsubscriber:', error);
     if (!response.headersSent) {
       // Only set status and send error if headers haven't been sent yet
       response.status(error.response?.status || 500).send({
