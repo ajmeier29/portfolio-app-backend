@@ -1,12 +1,13 @@
 require('dotenv').config()
+const { Resend } = require("resend");
 const express = require('express')
 const cors = require('cors')
 const axios = require('axios')
 const app = express()
 const CHECKBOX_SITE_SECRET = process.env.CHECKBOX_SITE_SECRET
 const INVISIBLE_SITE_SECRET = process.env.INVISIBLE_SITE_SECRET
-const JUSTIN_RESEND_ID = process.env.JUSTIN_RESEND_ID
 const JUSTIN_RESEND_AUD_ID = process.env.JUSTIN_RESEND_AUD_ID
+const JUSTIN_RESEND_APIKEY = process.env.JUSTIN_RESEND_APIKEY
 
 app.use(cors())
 app.use(express.json())
@@ -29,18 +30,20 @@ app.post('/verify/invisible', async (request, response) => {
 
 app.post('/subscribe/justin', async (request, response) => {
   try {
-    const resend = new Resend(JUSTIN_RESEND_ID);
-
+    const resend = new Resend(JUSTIN_RESEND_APIKEY);
+    console.log(`subscribing ${request.body.email_address}`)
     resend.contacts.create({
       email: request.body.email_address,
       firstName: '',
       lastName: '',
       unsubscribed: false,
       audienceId: JUSTIN_RESEND_AUD_ID,
+    }).then((resp) => {
+      console.log(`Response: ${JSON.stringify(resp)}`)
     });
 
   } catch (error) {
-    //console.error('Error adding subscriber:', error);
+    console.error('Error adding subscriber:', error);
     if (!response.headersSent) {
       // Only set status and send error if headers haven't been sent yet
       response.status(error.response?.status || 500).send({
